@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bulk Mobile Mockup Studio</title>
+<style>
+:root{
+  --bg-gradient: radial-gradient(circle at 50% 30%, #1e222d 0%, #0a0c10 100%);
+  --panel-bg: rgba(255,255,255,.07);
+  --panel-border: rgba(255,255,255,.12);
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --danger: #ef4444;
+  --success: #22c55e;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+body{
+  background:var(--bg-gradient);
+  color:var(--text-main);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:2rem 1rem;
+  background-size:cover;
+  background-position:center;
+}
+.container{width:100%;max-width:1200px;display:flex;flex-direction:column;align-items:center;gap:1.25rem;}
+.header{text-align:center;}
+.header h1{
+  font-size:2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;
+  background:linear-gradient(135deg,#fff 0%,#a1a1aa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.header p{color:var(--text-muted);font-size:.95rem;line-height:1.5;}
+.controls{
+  width:100%;
+  display:flex;
+  gap:.75rem;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  background:var(--panel-bg);
+  border:1px solid var(--panel-border);
+  backdrop-filter:blur(16px);
+  padding:1rem;
+  border-radius:16px;
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+.btn{
+  background:var(--accent);color:#fff;border:none;padding:.82rem 1.2rem;border-radius:10px;
+  font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s ease;display:inline-flex;
+  align-items:center;gap:.5rem;box-shadow:0 4px 14px rgba(59,130,246,.3);
+}
+.btn:hover{background:var(--accent-hover);transform:translateY(-1px);}
+.btn:disabled{background:#374151;color:#6b7280;cursor:not-allowed;box-shadow:none;transform:none;}
+.btn-secondary{
+  background:rgba(255,255,255,.08);color:var(--text-main);box-shadow:none;border:1px solid rgba(255,255,255,.15);
+}
+.btn-secondary:hover{background:rgba(255,255,255,.15);}
+.btn-danger{
+  background:rgba(239,68,68,.15);color:#fecaca;border:1px solid rgba(239,68,68,.25);box-shadow:none;
+}
+.btn-danger:hover{background:rgba(239,68,68,.24);}
+input[type=file]{display:none;}
+input[type=text]{
+  width:min(260px,100%);
+  background:rgba(255,255,255,.06);
+  color:var(--text-main);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:10px;
+  padding:.82rem .95rem;
+  outline:none;
+}
+input[type=text]::placeholder{color:#94a3b8;}
+.dropzone{
+  width:100%;
+  min-height:120px;
+  border:1px dashed rgba(255,255,255,.25);
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:1rem;
+  transition:.2s ease;
+  color:#d1d5db;
+}
+.dropzone.dragover{
+  border-color:rgba(59,130,246,.8);
+  background:rgba(59,130,246,.12);
+  transform:scale(1.01);
+}
+.dropzone strong{color:#fff;}
+.meta-row{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  flex-wrap:wrap;
+  align-items:center;
+  color:var(--text-muted);
+  font-size:.92rem;
+}
+.progress-wrap{
+  width:100%;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  overflow:hidden;
+  height:12px;
+}
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#3b82f6,#22c55e);
+  transition:width .15s ease;
+}
+.progress-text{
+  width:100%;
+  text-align:center;
+  color:#dbeafe;
+  min-height:22px;
+  font-size:.92rem;
+}
+.preview-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:12px;
+}
+.thumb{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  overflow:hidden;
+}
+.thumb img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  display:block;
+}
+.thumb .label{
+  padding:.55rem .6rem;
+  font-size:.78rem;
+  color:#e5e7eb;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.stage{
+  position:relative;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:1rem 0 2rem;
+}
+.phone-mockup{
+  position:relative;
+  width:320px;
+  height:660px;
+  background:#000;
+  border-radius:48px;
+  padding:12px;
+  box-shadow:0 0 0 2px rgba(255,255,255,.15),0 0 0 4px rgba(0,0,0,.8),0 25px 60px -10px rgba(0,0,0,.9),0 0 40px rgba(255,255,255,.05);
+}
+.phone-mockup::before{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:50px;
+  background:linear-gradient(135deg,rgba(255,255,255,.35) 0%,rgba(255,255,255,.05) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,.18) 100%);
+  pointer-events:none;
+  z-index:10;
+}
+.phone-btn-volume{position:absolute;left:-5px;top:130px;width:3px;height:50px;background:#2a2d35;border-radius:2px 0 0 2px;box-shadow:-1px 0 2px rgba(255,255,255,.2);}
+.phone-btn-power{position:absolute;right:-5px;top:150px;width:3px;height:65px;background:#2a2d35;border-radius:0 2px 2px 0;box-shadow:1px 0 2px rgba(255,255,255,.2);}
+.phone-screen{
+  position:relative;width:100%;height:100%;background:#050505;background-size:cover;background-position:center;
+  border-radius:38px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:16px;
+}
+.glass-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(115deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.06) 28%,rgba(255,255,255,0) 45%,rgba(255,255,255,.03) 100%);
+  pointer-events:none;z-index:5;border-radius:38px;
+}
+.status-bar{
+  position:relative;z-index:6;display:flex;justify-content:space-between;align-items:center;
+  color:#fff;font-size:.72rem;font-weight:600;padding:4px 8px 0;text-shadow:0 1px 3px rgba(0,0,0,.8);
+}
+.status-bar .icons{display:flex;gap:6px;align-items:center;}
+.time-widget{position:relative;z-index:6;margin-top:28px;padding-left:8px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7);}
+.time-widget .clock{font-size:3.2rem;font-weight:700;line-height:.9;letter-spacing:-1px;}
+.time-widget .date{margin-top:6px;font-size:.75rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase;opacity:.9;}
+.bottom-ui{position:relative;z-index:6;display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:4px;}
+.shortcuts{width:100%;display:flex;justify-content:space-between;padding:0 8px;}
+.icon-btn{
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.swipe-bar-text{color:rgba(255,255,255,.85);font-size:.72rem;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,.8);}
+.home-indicator{width:110px;height:4px;background:#fff;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.5);}
+#exportCanvas{display:none;}
+.notice{font-size:12px;color:#9ca3af;text-align:center;max-width:760px;line-height:1.5;}
+@media(max-width:600px){
+  .phone-mockup{width:280px;height:578px;}
+  .controls{width:100%;}
+  input[type=text]{width:100%;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Bulk Mobile Mockup Studio</h1>
+    <p>Multiple uploads, drag and drop, preview grid, progress bar, custom filenames, and ZIP download.</p>
+  </div>
+
+  <div class="controls">
+    <label for="fileInput" class="btn btn-secondary">Upload Images</label>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+
+    <input type="text" id="prefixInput" value="mockup" placeholder="Filename prefix">
+
+    <button id="zipBtn" class="btn" disabled>Generate ZIP</button>
+    <button id="clearBtn" class="btn btn-danger" disabled>Clear</button>
+  </div>
+
+  <div id="dropzone" class="dropzone">
+    Drop images here, or click Upload Images.
+  </div>
+
+  <div class="meta-row">
+    <div id="fileCount">0 images selected</div>
+    <div id="fileSize">0 MB total</div>
+  </div>
+
+  <div class="progress-wrap" aria-label="progress">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+  <div id="progressText" class="progress-text"></div>
+
+  <div id="previewGrid" class="preview-grid"></div>
+
+  <div class="notice">
+    Put <b>mockup.jpg</b> in the same folder as this HTML file. Generated images will be packed into one ZIP file.
+  </div>
+
+  <div class="stage">
+    <div class="phone-mockup">
+      <div class="phone-btn-volume"></div>
+      <div class="phone-btn-power"></div>
+      <div class="phone-screen" id="phoneScreen">
+        <div class="glass-overlay"></div>
+        <div class="status-bar">
+          <span>T-Mobile</span>
+          <div class="icons">
+            <svg width="14" height="10" fill="currentColor" viewBox="0 0 16 12"><path d="M0 10h3v2H0zm4-3h3v5H4zm4-3h3v8H8zm4-4h3v12h-3z"/></svg>
+            <span>LTE</span>
+            <svg width="16" height="10" fill="currentColor" viewBox="0 0 20 12"><rect x="0" y="1" width="16" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="2" y="3" width="9" height="6" rx="1"/><path d="M18 4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="time-widget">
+          <div class="clock">10<br>43</div>
+          <div class="date">Fri, May 9</div>
+        </div>
+        <div class="bottom-ui">
+          <div class="shortcuts">
+            <div class="icon-btn">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="icon-btn">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2h-3.172a2 2 0 01-1.414-.586l-1.414-1.414A2 2 0 0010.586 2H9.414a2 2 0 00-1.414.586L6.586 4.414A2 2 0 015.172 5H4zm16 12H4V7h2.172a4 4 0 002.828-1.172l1.414-1.414h3.172l1.414 1.414A4 4 0 0017.828 7H20v10z" clip-rule="evenodd"/></svg>
+            </div>
+          </div>
+          <div class="swipe-bar-text">Swipe up to unlock</div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="exportCanvas"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const fileInput = document.getElementById('fileInput');
+const zipBtn = document.getElementById('zipBtn');
+const clearBtn = document.getElementById('clearBtn');
+const dropzone = document.getElementById('dropzone');
+const previewGrid = document.getElementById('previewGrid');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const fileCount = document.getElementById('fileCount');
+const fileSize = document.getElementById('fileSize');
+const prefixInput = document.getElementById('prefixInput');
+const exportCanvas = document.getElementById('exportCanvas');
+const ctx = exportCanvas.getContext('2d');
+
+let uploadedFiles = [];
+let mockupImg = null;
+
+function loadMockupBackground(){
+  mockupImg = new Image();
+  mockupImg.onload = () => { document.body.style.backgroundImage = "url('mockup.jpg')"; };
+  mockupImg.onerror = () => {};
+  mockupImg.src = 'mockup.jpg';
+}
+loadMockupBackground();
+
+function humanSize(bytes){
+  const mb = bytes / 1024 / 1024;
+  return `${mb.toFixed(mb >= 10 ? 1 : 2)} MB`;
+}
+
+function updateMeta(){
+  fileCount.textContent = `${uploadedFiles.length} image(s) selected`;
+  const total = uploadedFiles.reduce((sum, f) => sum + f.size, 0);
+  fileSize.textContent = `${humanSize(total)} total`;
+  zipBtn.disabled = uploadedFiles.length === 0;
+  clearBtn.disabled = uploadedFiles.length === 0;
+  progressText.textContent = uploadedFiles.length ? 'Ready to generate ZIP.' : '';
+}
+
+function setProgress(percent, text){
+  progressBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+  if(text) progressText.textContent = text;
+}
+
+function addFiles(files){
+  const incoming = Array.from(files || []).filter(f => f.type.startsWith('image/'));
+  if(!incoming.length) return;
+  uploadedFiles = uploadedFiles.concat(incoming);
+  renderPreview();
+  updateMeta();
+}
+
+fileInput.addEventListener('change', e => {
+  addFiles(e.target.files);
+  fileInput.value = '';
+});
+
+dropzone.addEventListener('click', () => fileInput.click());
+
+['dragenter','dragover'].forEach(evt => {
+  dropzone.addEventListener(evt, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    dropzone.classList.add('dragover');
+  });
+});
+
+['dragleave','drop'].forEach(evt => {
+  dropzone.addEventListener(evt, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    dropzone.classList.remove('dragover');
+  });
+});
+
+dropzone.addEventListener('drop', e => {
+  const files = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files : [];
+  addFiles(files);
+});
+
+function renderPreview(){
+  previewGrid.innerHTML = '';
+  uploadedFiles.forEach(file => {
+    const card = document.createElement('div');
+    card.className = 'thumb';
+
+    const img = document.createElement('img');
+    img.alt = file.name;
+    img.src = URL.createObjectURL(file);
+    img.onload = () => URL.revokeObjectURL(img.src);
+
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = file.name;
+
+    card.appendChild(img);
+    card.appendChild(label);
+    previewGrid.appendChild(card);
+  });
+}
+
+function loadImageFromFile(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = event => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = event.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function drawCoverImage(image, x, y, w, h){
+  const scale = Math.max(w / image.width, h / image.height);
+  const iw = image.width * scale;
+  const ih = image.height * scale;
+  ctx.drawImage(image, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih);
+}
+
+function roundedRectPath(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+}
+
+async function generateMockupBlob(uploadedImg, index){
+  const cw = 1200, ch = 1600;
+  exportCanvas.width = cw;
+  exportCanvas.height = ch;
+
+  if(mockupImg && mockupImg.complete && mockupImg.naturalWidth){
+    drawCoverImage(mockupImg, 0, 0, cw, ch);
+  }else{
+    const bg = ctx.createRadialGradient(cw / 2, ch * .3, 50, cw / 2, ch / 2, cw * .8);
+    bg.addColorStop(0, '#1e222d');
+    bg.addColorStop(1, '#0a0c10');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, cw, ch);
+  }
+
+  const pw = 480, ph = 990, px = (cw - pw) / 2, py = (ch - ph) / 2, radius = 72;
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.85)';
+  ctx.shadowBlur = 60;
+  ctx.shadowOffsetY = 30;
+  ctx.fillStyle = '#000';
+  roundedRectPath(px, py, pw, ph, radius);
+  ctx.fill();
+  ctx.restore();
+
+  const bevel = ctx.createLinearGradient(px, py, px + pw, py + ph);
+  bevel.addColorStop(0, 'rgba(255,255,255,.45)');
+  bevel.addColorStop(.3, 'rgba(255,255,255,.08)');
+  bevel.addColorStop(.7, 'rgba(255,255,255,.02)');
+  bevel.addColorStop(1, 'rgba(255,255,255,.25)');
+  ctx.strokeStyle = bevel;
+  ctx.lineWidth = 3;
+  roundedRectPath(px, py, pw, ph, radius);
+  ctx.stroke();
+
+  const margin = 18;
+  const sx = px + margin, sy = py + margin, sw = pw - margin * 2, sh = ph - margin * 2, sRadius = radius - 12;
+
+  ctx.save();
+  roundedRectPath(sx, sy, sw, sh, sRadius);
+  ctx.clip();
+
+  ctx.fillStyle = '#050505';
+  ctx.fillRect(sx, sy, sw, sh);
+
+  const scale = Math.max(sw / uploadedImg.width, sh / uploadedImg.height);
+  const iw = uploadedImg.width * scale;
+  const ih = uploadedImg.height * scale;
+  ctx.drawImage(uploadedImg, sx + (sw - iw) / 2, sy + (sh - ih) / 2, iw, ih);
+
+  const glass = ctx.createLinearGradient(sx, sy, sx + sw, sy + sh);
+  glass.addColorStop(0, 'rgba(255,255,255,.25)');
+  glass.addColorStop(.35, 'rgba(255,255,255,.06)');
+  glass.addColorStop(.5, 'rgba(255,255,255,0)');
+  glass.addColorStop(1, 'rgba(255,255,255,.04)');
+  ctx.fillStyle = glass;
+  ctx.fillRect(sx, sy, sw, sh);
+
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(0,0,0,.7)';
+  ctx.shadowBlur = 10;
+
+  ctx.font = '600 16px -apple-system,sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('T-Mobile', sx + 24, sy + 36);
+  ctx.fillText('LTE', sx + sw - 80, sy + 36);
+
+  ctx.font = '700 86px -apple-system,sans-serif';
+  ctx.fillText('10', sx + 28, sy + 140);
+  ctx.fillText('43', sx + 28, sy + 220);
+
+  ctx.font = '600 18px -apple-system,sans-serif';
+  ctx.fillText('FRI, MAY 9', sx + 30, sy + 260);
+
+  ctx.font = '500 16px -apple-system,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Swipe up to unlock', sx + sw / 2, sy + sh - 45);
+
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.roundRect(sx + sw / 2 - 80, sy + sh - 20, 160, 6, 3);
+  ctx.fill();
+
+  ctx.restore();
+
+  return new Promise(resolve => {
+    exportCanvas.toBlob(blob => resolve(blob), 'image/png', 1);
+  });
+}
+
+zipBtn.addEventListener('click', async () => {
+  if(!uploadedFiles.length) return;
+
+  zipBtn.disabled = true;
+  clearBtn.disabled = true;
+  prefixInput.disabled = true;
+  fileInput.disabled = true;
+
+  try{
+    const zip = new JSZip();
+    const prefix = (prefixInput.value || 'mockup').trim().replace(/[^w-]+/g, '_') || 'mockup';
+    const total = uploadedFiles.length;
+
+    for(let i = 0; i < total; i++){
+      setProgress((i / total) * 100, `Processing ${i + 1} / ${total}: ${uploadedFiles[i].name}`);
+      const img = await loadImageFromFile(uploadedFiles[i]);
+      const blob = await generateMockupBlob(img, i + 1);
+      const filename = `${prefix}-${String(i + 1).padStart(2, '0')}.png`;
+      zip.file(filename, blob);
+      setProgress(((i + 1) / total) * 100, `Added ${filename} to ZIP`);
+    }
+
+    setProgress(100, 'Generating ZIP...');
+    const content = await zip.generateAsync(
+      { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+      meta => {
+        setProgress(meta.percent, `Generating ZIP: ${Math.round(meta.percent)}%`);
+      }
+    );
+
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${prefix}-mockups.zip`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    setProgress(100, 'ZIP download started.');
+  }catch(err){
+    console.error(err);
+    setProgress(0, 'Error generating ZIP.');
+  }finally{
+    zipBtn.disabled = uploadedFiles.length === 0;
+    clearBtn.disabled = uploadedFiles.length === 0;
+    prefixInput.disabled = false;
+    fileInput.disabled = false;
+  }
+});
+
+clearBtn.addEventListener('click', () => {
+  uploadedFiles = [];
+  previewGrid.innerHTML = '';
+  progressBar.style.width = '0%';
+  progressText.textContent = '';
+  fileCount.textContent = '0 images selected';
+  fileSize.textContent = '0 MB total';
+  zipBtn.disabled = true;
+  clearBtn.disabled = true;
+});
+</script>
+</body>
+</html>
