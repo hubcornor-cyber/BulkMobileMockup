@@ -1,4 +1,4 @@
-# 📱 BulkMobileMockup
+# 📱 MobileMockup
 ### Create Bulk Portrait Images in Mobile Mockup with Single Click
 
 Transform your portrait images into stunning mobile mockups instantly! No Photoshop needed.
@@ -46,7 +46,8 @@ Transform your portrait images into stunning mobile mockups instantly! No Photos
 - 100% Client-Side - No backend needed
 
 ### 📸 Result Preview
-![Result](https://hubcornor-cyber.github.io/BulkMobileMockup/result.jpg)
+<img src="https://hubcornor-cyber.github.io/BulkMobileMockup/result.jpg" width="30%" />
+
 
 ---
 **Made with ❤️ by HubCornor-Cyber**
