@@ -3,7 +3,6 @@
 
 Transform your portrait images into stunning mobile mockups instantly! No Photoshop needed.
 
-![BulkMobileMockup Result](https://hubcornor-cyber.github.io/BulkMobileMockup/result.jpg)
 
 ### 🚀 Live Demo
 
@@ -46,7 +45,7 @@ Transform your portrait images into stunning mobile mockups instantly! No Photos
 - 100% Client-Side - No backend needed
 
 ### 📸 Result Preview
-<img src="https://hubcornor-cyber.github.io/BulkMobileMockup/result.jpg" width="30%" />
+<img src="https://hubcornor-cyber.github.io/BulkMobileMockup/result.jpg" width="50%" />
 
 
 ---
